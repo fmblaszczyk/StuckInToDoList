@@ -13,6 +13,9 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import stuckinjava.todolist.security.impl.UserDetailsServiceImpl;
+import stuckinjava.todolist.security.jwt.AuthEntryPointJwt;
+import stuckinjava.todolist.security.jwt.AuthTokenFilter;
 
 
 @Configuration
