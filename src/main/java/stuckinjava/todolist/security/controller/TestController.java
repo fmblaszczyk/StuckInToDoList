@@ -32,7 +32,7 @@ public class TestController {
     }
 
     @GetMapping("/admin")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAuthority('DELETE_OTHER_USERS_DATA')")
     public String adminAccess() {
         return "Admin Board.";
     }
