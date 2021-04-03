@@ -9,4 +9,5 @@ public class ToDoTaskDto {
 
     private String heading;
     private String description;
+    private boolean isDone;
 }
