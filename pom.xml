@@ -2,10 +2,12 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
+
+	<!-- Spring version - check for update ! -->
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>2.4.2</version>
+		<version>2.4.3</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 
@@ -15,10 +17,13 @@
 	<name>todolist</name>
 	<description>ToDoList for startup</description>
 
+	<!-- We use '11' -->
 	<properties>
 		<java.version>11</java.version>
 	</properties>
+
 	<dependencies>
+
 		<!-- jpa, crud repository -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>

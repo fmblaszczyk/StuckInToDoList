@@ -19,21 +19,23 @@ import java.util.*;
 @Component
 public class SetupDataLoader implements ApplicationListener<ContextRefreshedEvent> {
 
-
-
-    @Autowired
     private UserRepository userRepository;
 
-    @Autowired
     private RoleRepository roleRepository;
 
-    @Autowired
     private PrivilegeRepository privilegeRepository;
 
     private boolean alreadySetup = false;
 
-    @Autowired
     private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    public SetupDataLoader(UserRepository userRepository, RoleRepository roleRepository, PrivilegeRepository privilegeRepository, PasswordEncoder passwordEncoder) {
+        this.userRepository = userRepository;
+        this.roleRepository = roleRepository;
+        this.privilegeRepository = privilegeRepository;
+        this.passwordEncoder = passwordEncoder;
+    }
 
     @Override
     @Transactional
@@ -41,43 +43,38 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
         if (alreadySetup) {
             return;
         }
-       // Example multi-role privilege
+
+        // Example multi-role privilege
         final Privilege registeredUserPrivilege = createPrivilegeIfNotFound("REGISTERED_USER");
 
         // Example admin privileges
+        final Privilege deleteUsersDataPrivilege = createPrivilegeIfNotFound("DELETE_OTHER_USERS_DATA");
+
+        // Example mod privileges
         final Privilege readUsersDataPrivilege = createPrivilegeIfNotFound("READ_OTHER_USERS_DATA");
         final Privilege editUsersDataPrivilege = createPrivilegeIfNotFound("EDIT_OTHER_USERS_DATA");
-        final Privilege deleteUsersDataPrivilege = createPrivilegeIfNotFound("DELETE_OTHER_USERS_DATA");
 
         // Example simple user privileges
         final Privilege readOwnDataPrivilege = createPrivilegeIfNotFound("READ_REST_OWN_DATA");
         final Privilege editOwnDataPrivilege = createPrivilegeIfNotFound("EDIT_OWN_DATA");
 
 
-
-
-
-
         // == create initial roles
-        final List<Privilege> adminPrivileges = new ArrayList<Privilege>(Arrays.asList(registeredUserPrivilege,readUsersDataPrivilege, editUsersDataPrivilege, deleteUsersDataPrivilege));
-        final List<Privilege> userPrivileges = new ArrayList<Privilege>(Arrays.asList(registeredUserPrivilege,readOwnDataPrivilege, editOwnDataPrivilege));
-        final Role adminRole = createRoleIfNotFound(ERole.ROLE_ADMIN, adminPrivileges);
+        final List<Privilege> userPrivileges = new ArrayList<>(Arrays.asList(registeredUserPrivilege, readOwnDataPrivilege, editOwnDataPrivilege));
+        final List<Privilege> modPrivileges = new ArrayList<>(Arrays.asList(registeredUserPrivilege, readUsersDataPrivilege, editUsersDataPrivilege));
+        final List<Privilege> adminPrivileges = new ArrayList<>(Arrays.asList(registeredUserPrivilege, deleteUsersDataPrivilege));
+
         final Role userRole = createRoleIfNotFound(ERole.ROLE_USER, userPrivileges);
+        final Role modRole = createRoleIfNotFound(ERole.ROLE_MODERATOR,modPrivileges);
+        final Role adminRole = createRoleIfNotFound(ERole.ROLE_ADMIN, adminPrivileges);
 
 
         // == create initial example users
         User adminUser = createUserIfNotFound("admin@test.com", "admin", "test", new HashSet<>(new ArrayList<Role>(Arrays.asList(adminRole))));
         User commonUser = createUserIfNotFound("common@test.com", "common","test", new HashSet<>(new ArrayList<Role>(Arrays.asList(userRole))));
 
-
-
         alreadySetup = true;
-
     }
-
-
-
-
 
 
     @Transactional
@@ -102,12 +99,7 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
             return roleInBase.get();
         }
 
-
     }
-
-
-
-
 
 
     @Transactional
@@ -127,7 +119,5 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
             return userInBase.get();
         }
     }
-
-
 
 }
