@@ -11,4 +11,5 @@ public interface ToDoTaskRepository extends CrudRepository<ToDoTask, Integer> {
     List<ToDoTask> findAllByToDoListId (int id);
     ToDoTask findById (int id);
     ToDoTask findToDoTaskByIdAndToDoListId (int todotaskId, int todolistId);
+    List<ToDoTask> findAll();
 }
